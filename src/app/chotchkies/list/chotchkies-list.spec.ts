@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ChotchkiesListComponent} from './chotchkies-list.component';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ChotchkiesService} from '../chotchkies.service';
+import {ChotchkiesService} from '../user.service';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
 

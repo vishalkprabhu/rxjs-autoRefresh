@@ -1,98 +1,97 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Chotchkie} from '../chotchkies.model';
-import {ChotchkiesService} from '../chotchkies.service';
-import {merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
-import {FormBuilder, NgModel} from '@angular/forms';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { User } from "../User.model";
+import { UserService } from "../user.service";
+import { merge } from "rxjs";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  switchMap,
+  tap
+} from "rxjs/operators";
+import { FormBuilder, NgModel } from "@angular/forms";
 
 @Component({
-  selector: 'rxjs-playground-chotchkies-list',
+  selector: "rxjs-playground-chotchkies-list",
   template: `
-      <h3>List of Chotchkies</h3>
-      <form>
-          <label>Filter</label>
-          <input
-            [(ngModel)]="searchTerm"
-            class="form-control"
-            name="searchTerm"
-            type="text"
-            #filterInput="ngModel">
-          <button
-            class="btn btn-danger">
-            Search!
-          </button>
-      </form>
+    <h3>List of Users</h3>
+    <form>
+      <label>Filter</label>
+      <input
+        [(ngModel)]="searchTerm"
+        class="form-control"
+        name="searchTerm"
+        type="text"
+        #filterInput="ngModel"
+      />
+      <button class="btn btn-danger">
+        Search!
+      </button>
+    </form>
     <div class="row"><div class="col">&nbsp;</div></div>
-      <table class="table table-bordered table-striped table-responsive-sm" *ngIf="chotchkies">
-        <tr class="mb-2" *ngFor="let chotchkie of chotchkies">
-          <td>{{ chotchkie.name }} </td>
-          <td>{{ chotchkie.description }}</td>
-          <td>{{ chotchkie.quantityOnHand }}</td>
-          <td>{{ chotchkie.price | currency }}</td>
-          <td>
-            <button
-              class="btn btn-sm btn-primary"
-              (click)="decrementInventory(chotchkie.id)">
-           Buy one! </button>
-          </td>
-          <td>
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="removeChotchkie(chotchkie.id)">
+    <table
+      class="table table-bordered table-striped table-responsive-sm"
+      *ngIf="users"
+    >
+      <tr
+        class="mb-2"
+        style="word-break: break-word;"
+        *ngFor="let user of users"
+      >
+        <td>{{ user.name }}</td>
+        <td>{{ user.address }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.designation }}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" (click)="removeUser(user.id)">
             Delete
           </button>
-          </td>
-        </tr>
-      </table>
+        </td>
+      </tr>
+    </table>
   `
 })
 export class ChotchkiesListComponent implements OnInit {
-
-  @ViewChild('filterInput') filterInput: NgModel;
+  @ViewChild("filterInput") filterInput: NgModel;
 
   searchTerm: string;
 
-  chotchkies: Chotchkie[];
+  users: User[];
 
-  constructor(private formBuilder: FormBuilder,
-              private chotchkiesService: ChotchkiesService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     const emptySearch$ = this.filterInput.valueChanges.pipe(
       filter(v => !!!v),
       debounceTime(500),
-      switchMap(() => this.chotchkiesService.getAllChotchkies())
+      switchMap(() => this.userService.getAllUsers())
     );
 
     const valueSearch$ = this.filterInput.valueChanges.pipe(
       filter(v => !!v),
       debounceTime(500),
       distinctUntilChanged(),
-      switchMap((term: string) => this.chotchkiesService.getChotchkiesBySearchTerm(term)));
+      switchMap((term: string) => this.userService.getUsersBySearchTerm(term))
+    );
 
-    this.chotchkiesService.refreshNeeded$.pipe(
-      tap(() => this.filterInput.control.reset(null))
-    ).subscribe();
+    this.userService.refreshNeeded$
+      .pipe(tap(() => this.filterInput.control.reset(null)))
+      .subscribe();
 
-    merge(emptySearch$, valueSearch$)
-      .subscribe(results => this.chotchkies = results);
-  }
-
-  private decrementInventory(id: number) {
-    this.chotchkiesService.patchChotchkie(id, {
-      purchasedQuantity: 1
-    })
-      .subscribe(
-        () => console.log(`Quantity updated...`),
-        (error) => alert(JSON.stringify(error))
+    merge(emptySearch$, valueSearch$).subscribe(
+      results => (this.users = results)
     );
   }
 
-  private removeChotchkie(id: number) {
-    this.chotchkiesService.removeChotchkie(id)
+  private removeUser(id: number) {
+    this.userService
+      .removeUser(id)
       .subscribe(
         () => console.log(`${id} deleted.`),
-        (error) => alert(JSON.stringify(error))
+        error => alert(JSON.stringify(error))
       );
   }
 }

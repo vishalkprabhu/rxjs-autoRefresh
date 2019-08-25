@@ -1,11 +1,11 @@
-import {ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {ChotchkiesService} from './chotchkies.service';
-import {HttpClientModule} from '@angular/common/http';
-import {CreateChotchkieModule} from './create-form/create-chotchkie.module';
-import {ChotchkiesListModule} from './list/chotchkies-list.module';
-import {ChotchkiesContainerComponent} from './chotchkies-container.component';
+import { ReactiveFormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { UserService } from "./user.service";
+import { HttpClientModule } from "@angular/common/http";
+import { CreateChotchkieModule } from "./create-form/create-chotchkie.module";
+import { ChotchkiesListModule } from "./list/chotchkies-list.module";
+import { ChotchkiesContainerComponent } from "./chotchkies-container.component";
 
 @NgModule({
   imports: [
@@ -15,14 +15,8 @@ import {ChotchkiesContainerComponent} from './chotchkies-container.component';
     CreateChotchkieModule,
     ChotchkiesListModule
   ],
-  declarations: [
-    ChotchkiesContainerComponent
-  ],
-  providers: [
-    ChotchkiesService
-  ],
-  exports: [
-    ChotchkiesContainerComponent
-  ]
+  declarations: [ChotchkiesContainerComponent],
+  providers: [UserService],
+  exports: [ChotchkiesContainerComponent]
 })
-export class ChotchkiesModule { }
+export class ChotchkiesModule {}

@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'rxjs-playground-chotchkies',
+  selector: "rxjs-playground-chotchkies",
   template: `
     <div class="navbar">
       <div class="navbar-text">
-        <h1>Reactive Forms Demo - Chotchkies</h1>
+        <h1>Reactive Forms Demo - UserCreation/List</h1>
       </div>
     </div>
     <div class="row border-top border-dark">
@@ -18,6 +18,4 @@ import {Component} from '@angular/core';
     </div>
   `
 })
-export class ChotchkiesContainerComponent {
-
-}
+export class ChotchkiesContainerComponent {}
