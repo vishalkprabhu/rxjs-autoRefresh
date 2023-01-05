@@ -14,7 +14,7 @@
   "devDependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "jest": "^23.5.0",
+    "jest": "^29.3.1",
     "lowdb": "^1.0.0",
     "sqlite3": "^4.0.2",
     "supertest": "^3.1.0"
